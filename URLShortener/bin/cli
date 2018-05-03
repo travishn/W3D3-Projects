@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+class CLI
+  def login
+    print "Enter you email"
+    email = gets.chomp 
+
+    user = User.find_by(email: email)
+  end
+  
+  def choose_option(user)
+    print "Visit or create a url input visit or create" 
+
+    input = gets.chomp 
+
+    if input == "create" 
+      print "What is your long url?"
+      
+      long_url = gets.chomp 
+      target_url = ShortenedUrl.create_shortened_url(user, long_url)
+      p target_url
+    elsif input == "visit"
+      print "What URL do you want to visit?"
+      short_url = gets.chomp
+      url = ShortenedUrl.find_by(short_url: short_url)
+      
+      Visit.record_visit!(user, url)
+      Launchy.open(url.long_url)
+    end
+  end 
+end
+  
+  cli = CLI.new
+  cli.choose_option(cli.login)
+  
+  
+
+
+ 
+  
+
